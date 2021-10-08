@@ -1,0 +1,11 @@
+__pycache__/
+*.mkv
+
+test.py
+wavelength.py
+
+# Ignore all audio except the one used to generate the video
+*.wav
+!Impassive.wav
+
+

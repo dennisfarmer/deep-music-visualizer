@@ -1,0 +1,28 @@
+name: ganmusicvis
+channels:
+  - defaults
+dependencies:
+  - python=3.9.7=h88f2d9e_1
+  - _pytorch_select=0.1=cpu_0
+  - libcxx=12.0.0=h2f01273_0
+  - libffi=3.3=hb1e8313_2
+  - libmklml=2019.0.5=0
+  - llvm-openmp=12.0.0=h0dcd299_1
+  - pip=21.2.4=py37hecd8cb5_0
+  - pytorch=1.7.1=cpu_py39h7e2095a_0
+  - pip:
+    - tqdm==4.32.1
+    - librosa==0.8.1
+    - moviepy==1.0.3
+    - scipy==1.7.1
+    - pytorch-pretrained-biggan==0.1.1
+    - pydub==0.23.1
+    - audioread==2.1.9
+    - boto3==1.18.57
+    - botocore==1.21.57
+    - imageio==2.9.0
+    - imageio-ffmpeg==0.4.5
+    - llvmlite==0.37.0
+    - mutagen==1.45.1
+    - numpy==1.20.3
+prefix: /Users/dennisfarmer/miniconda3/envs/ganmusicvis

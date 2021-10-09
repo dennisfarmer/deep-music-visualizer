@@ -5,6 +5,7 @@ TITLE=Impassive
 FFMPEGFLAGS = -y -hide_banner -loglevel warning
 SOXREVERB = 60 50 55
 HERTZ=48000 
+MSCZDIR=./media
 # To add delay to reverb tracks:
 #sox -n -r 48000 -c 2 silence.wav trim 0 0.020
 #sox -r 48000 silence.wav temp01.wav temp02.wav
@@ -27,15 +28,30 @@ HERTZ=48000
 # bottom: 0,32, 1024x32
 # top: 0,512, 1024x32
 
-# periods for various trig functions
-PI = 3.141592653589793
-2PI = 6.283185307179586
-4PI = 12.566370614359172
-4PIdiv3 = 4.1887902047863905
+
+
 
 build: audio video
 	@make cleanall
 	# all done!
+
+
+midi:
+	@mscore $(MSCZDIR)/$(TITLE).mscz -o measures.midi
+
+
+
+
+
+
+
+
+
+#python visualize.py --song ./Impassive.wav --tempo_sensitivity 0.5 --depth 0.8 --resolution 512 --output_file ./Impassive.mp4 --sort_classes_by_power 0 --num_classes 12 --classes 663 947 642782 624 909 541 815 978 789 508 429
+gan:
+	cd video-generation
+	python visualize.py --song ./Impassive.wav --tempo_sensitivity 0.5 --depth 0.8 --resolution 512 --output_file ../Impassive.mp4 --use_previous_classes 1 --use_previous_vectors 1
+	cd ..
 
 audio: copy
 	# Combining vibe tracks and adding tremolo to vibraphone parts

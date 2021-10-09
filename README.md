@@ -16,6 +16,18 @@ More examples: https://www.instagram.com/deep_music_visualizer/
 
 ## Installation
 
+Install Musescore <a href="https://musescore.org/en/download">here</a>, and in your preferences set your export sample rate to 48000 Hz:
+
+[](./media/musescore_preferences.png)
+
+To use the `mscore` command line utility, you may have to add Musescore to your `$PATH` via adding the following line to your .zshrc or equivalent:
+
+```zsh
+export PATH="/Applications/Musescore\ 3.app/Contents/MacOS/mscore:$PATH"
+```
+
+For Windows/Linux, just export each of the scores as `.wav` files manually.
+
 With conda installed, run the following (pytorch gives issues when installed with pip for some reason)
 ```zsh
 git clone https://github.com/msieg/deep-music-visualizer.git
@@ -24,7 +36,7 @@ pip install conda
 conda env create -f environment.yml
 ```
 
-If you are on linux, you may also need to run:
+If you are on Linux, you may also need to run:
 
 ```zsh
 apt-get update
@@ -32,11 +44,25 @@ apt-get install ffmpeg
 apt-get install libsndfile1
 ```
 
+On MacOS, you might need to run:
+
+```zsh
+brew install ffmpeg
+brew install libsndfile  # notice missing '1' compared to Linux
+```
+
+On Windows, you might need to run:
+
+```zsh
+# I bet powershell can't do this!
+bash www.apple.com/purchase.sh --macbook_pro_13
+```
+
 ## How to run
 
 See original repository for details on `visualize.py` parameters.
 
-Using Musescore, export the score parts (Vibe, Bells, and Marimba) from the two .mscz files to the `./media` directory of the repository, then run either `make gan build` or one of the following to compile the music and audio into a music video.
+Using Musescore, export the score parts (Vibe, Bells, and Marimba) from the two .mscz files to the `./media` directory of the repository using `make mscore` or manually, then run either `make gan build` or one of the following to compile the music and audio into a music video.
 
 ```zsh
 # construct a 512x512 neural network audio visualization of the unaltered audio (Impassive.wav)

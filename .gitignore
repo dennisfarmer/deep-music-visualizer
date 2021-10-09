@@ -1,5 +1,7 @@
 __pycache__/
 *.mkv
+*.mp4
+!video-generation/Impassive.mp4
 
 test.py
 wavelength.py

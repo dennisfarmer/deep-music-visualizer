@@ -17,6 +17,7 @@ dependencies:
     - scipy==1.7.1
     - pytorch-pretrained-biggan==0.1.1
     - pydub==0.23.1
+    - pillow==8.3.2
     - audioread==2.1.9
     - boto3==1.18.57
     - botocore==1.21.57
@@ -25,4 +26,5 @@ dependencies:
     - llvmlite==0.37.0
     - mutagen==1.45.1
     - numpy==1.20.3
+    - mido==1.2.10
 prefix: /Users/dennisfarmer/miniconda3/envs/ganmusicvis

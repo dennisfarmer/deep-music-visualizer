@@ -17,6 +17,17 @@ class NumpyTemplate(Template):
         default_mapping = self.default.copy()
         default_mapping.update(mapping)
         return default_mapping
+
+    def rename(self, new_name: str):
+        if isinstance(new_name, str):
+            self.name = name
+        else: raise TypeError("Incorrect name type; should be string")
+
+    def copy(self, default: dict=None):
+        new = NumpyTemplate(self.name, self.template, self.default)
+        if default:
+            new.update(default)
+        return new
     
     def update(self, new_default: dict=None, **kwargs):
         if new_default:
@@ -55,6 +66,9 @@ class Function:
         self.sawtooth = NumpyTemplate("sawtooth", "-(2*$a)/pi*arctan(cot((pi*t)/$p))", self.default)
         self.sine = NumpyTemplate("sine", "$a*np.sin((2*np.pi)/np.abs($p)*t)", self.default)
         self.cosine = NumpyTemplate("cosine", "$a*np.cos((2*np.pi)/np.abs($p)*t)", self.default)
+
+        self.sine1 = self.sine.copy(default={"p": "pi/6", "a": "0.5"))
+        self.sine1.rename("sine1")
 
         if np_template:
             if isinstance(np_template, NumpyTemplate):

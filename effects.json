@@ -1,0 +1,288 @@
+{
+    "vibes": [ 
+        { 
+            "effect": "none",
+            "m1": 1,
+            "b1": 1,
+            "m2": 2,
+            "b2": 1
+        },
+        {
+            "effect": "straight",
+            "m1": 2,
+            "b1": 1,
+            "m2": 1,
+            "b2": 3,
+            "ear_i": -0.50,
+            "ear_f": 0.25
+        },
+        {
+            "effect": "whole_cosine",
+            "m1": 2,
+            "b1": 3,
+            "m2": 3,
+            "b2": 1,
+            "ear_i": 0.25,
+            "ear_mid": -0.1
+        },
+        {
+            "effect": "quarter_sine",
+            "m1": 3,
+            "b1": 1,
+            "m2": 3,
+            "b2": 3,
+            "ear_i": -0.8,
+            "ear_mid": 0,
+            "ear_f": 0.4
+        },
+        {
+            "effect": "straight",
+            "m1": 3,
+            "b1": 3,
+            "m2": 4,
+            "b2": 3,
+            "ear_i": 0.4
+        },
+        {
+            "effect": "half_cosine",
+            "m1": 4,
+            "b1": 3,
+            "m2": 5,
+            "b2": 1,
+            "ear_i": 0.4,
+            "ear_f": -0.25
+        },
+        {
+            "effect": "sawtooth",
+            "m1": 5,
+            "b1": 1,
+            "m2": 6,
+            "b2": 6,
+            "ear_i": -0.25,
+            "ear_f": -0.23,
+            "cycles": "per_beat"
+        },
+        {
+            "effect": "quarter_sine",
+            "m1": 6,
+            "b1": 6,
+            "m2": 7,
+            "b2": 3,
+            "ear_i": -0.23,
+            "ear_f": 0.4
+        },
+        {
+            "effect": "half_cosine",
+            "m1": 7,
+            "b1": 3,
+            "m2": 7,
+            "b2": 5,
+            "ear_i": 0.4,
+            "ear_f": 0
+        },
+        {
+            "effect": "none",
+            "m1": 7,
+            "b1": 5,
+            "m2": 10,
+            "b2": 1
+        },
+        {
+            "effect": "straight",
+            "m1": 10,
+            "b1": 1,
+            "m2": 11,
+            "b2": 1,
+            "ear_i": 0,
+            "ear_f": 0.4
+        },
+        {
+            "effect": "straight",
+            "m1": 11,
+            "b1": 1,
+            "m2": 12,
+            "b2": 1,
+            "ear_i": 0.4
+        },
+        {
+            "effect": "whole_cosine",
+            "m1": 12,
+            "b1": 1,
+            "m2": 13,
+            "b2": 1,
+            "ear_i": 0.4,
+            "ear_mid": 0.7
+        },
+        {
+            "effect": "straight",
+            "m1": 13,
+            "b1": 1,
+            "m2": 14,
+            "b2": 1,
+            "ear_i": 0.4,
+            "ear_f": 0
+        },
+        {
+            "effect": "straight",
+            "m1": 14,
+            "b1": 1,
+            "m2": 14,
+            "b2": 3,
+            "ear_i": 0,
+            "ear_f": -0.4
+        },
+        {
+            "effect": "straight",
+            "m1": 14,
+            "b1": 3,
+            "m2": 15,
+            "b2": 1,
+            "ear_i": -0.4
+        },
+        {
+            "effect": "straight",
+            "m1": 15,
+            "b1": 1,
+            "m2": 15,
+            "b2": 2.5,
+            "ear_i": -0.4,
+            "ear_f": 0
+        },
+        {
+            "effect": "none",
+            "m1": 15,
+            "b1": 2.5,
+            "m2": "end"
+        }
+    ],
+    "marimba": [
+        { 
+            "effect": "none",
+            "m1": 1,
+            "b1": 1,
+            "m2": 5,
+            "b2": 3
+        },
+        {
+            "effect": "straight",
+            "m1": 5,
+            "b1": 3,
+            "m2": 6,
+            "b2": 1,
+            "ear_i": -0.8,
+            "ear_f": -0.7
+        },
+        {
+            "effect": "straight",
+            "m1": 6,
+            "b1": 1,
+            "m2": 6,
+            "b2": 4,
+            "ear_i": -0.7,
+            "ear_f": -0.9
+        },
+        {
+            "effect": "straight",
+            "m1": 6,
+            "b1": 4,
+            "m2": 6,
+            "b2": 6.25,
+            "ear_i": -0.9,
+            "ear_f": -0.75
+        },
+        {
+            "effect": "half_cosine",
+            "m1": 6,
+            "b1": 6.25,
+            "m2": 8,
+            "b2": 1,
+            "ear_i": -0.75,
+            "ear_f": 0
+        },
+        {
+            "effect": "none",
+            "m1": 8,
+            "b1": 1,
+            "m2": 10,
+            "b2": 1
+        },
+        {
+            "effect": "straight",
+            "m1": 10,
+            "b1": 1,
+            "m2": 11,
+            "b2": 1,
+            "ear_i": 0,
+            "ear_f": -0.4
+        },
+        {
+            "effect": "whole_cosine",
+            "m1": 11,
+            "b1": 1,
+            "m2": 11,
+            "b2": 2.5,
+            "ear_i": -0.4,
+            "ear_mid": -0.35
+        },
+        {
+            "effect": "whole_cosine",
+            "m1": 11,
+            "b1": 2.5,
+            "m2": 12,
+            "b2": 1,
+            "ear_i": -0.4,
+            "ear_mid": -0.45
+        },
+        {
+            "effect": "half_cosine",
+            "m1": 12,
+            "b1": 1,
+            "m2": 12,
+            "b2": 3,
+            "ear_i": -0.4,
+            "ear_f": -0.1
+        },
+        {
+            "effect": "half_cosine",
+            "m1": 12,
+            "b1": 3,
+            "m2": 13,
+            "b2": 1,
+            "ear_i": -0.1,
+            "ear_f": -0.25
+        },
+        {
+            "effect": "straight",
+            "m1": 13,
+            "b1": 1,
+            "m2": 14,
+            "b2": 1,
+            "ear_i": -0.25,
+            "ear_mid": 0
+        },
+        {
+            "effect": "straight",
+            "m1": 14,
+            "b1": 1,
+            "m2": 15,
+            "b2": 1,
+            "ear_i": 0,
+            "ear_f": 0.5
+        },
+        {
+            "effect": "straight",
+            "m1": 15,
+            "b1": 1,
+            "m2": 15,
+            "b2": 2.5,
+            "ear_i": 0.5,
+            "ear_f": 0
+        },
+        {
+            "effect": "none",
+            "m1": 15,
+            "b1": 2.5,
+            "m2": "end"
+        }
+    ]
+}

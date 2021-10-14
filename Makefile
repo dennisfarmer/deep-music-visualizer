@@ -3,9 +3,13 @@ TITLE=Impassive
 .SILENT: clean cleanall
 .PHONY: clean cleanall
 FFMPEGFLAGS = -y -hide_banner -loglevel warning
+MSCORE=/Applications/Musescore\ 3.app/Contents/MacOS/mscore
 SOXREVERB = 60 50 55
 HERTZ=48000 
 MSCZDIR=./media
+MUSE=$(MSCZDIR)/muse
+WAV=$(MSCZDIR)/wav
+MKV=$(MSCZDIR)/mkv
 # To add delay to reverb tracks:
 #sox -n -r 48000 -c 2 silence.wav trim 0 0.020
 #sox -r 48000 silence.wav temp01.wav temp02.wav
@@ -35,62 +39,89 @@ build: audio video
 	@make cleanall
 	# all done!
 
+mscore:
+	# generating individual wav files
+	$(foreach file, $(wildcard $(MUSE)/*.mscz),\
+		$(MSCORE) $(file) -o $(WAV)/$(shell basename $(file) .mscz).wav >/dev/null 2>&1;)
 
 midi:
-	@mscore $(MSCZDIR)/$(TITLE).mscz -o measures.midi
-
-
-
-
-
-
-
-
+	# generating midi file for audio panning
+	@$(MSCORE) $(MSCZDIR)/$(TITLE).mscz -o $(MSCZDIR)/measures.midi
 
 #python visualize.py --song ./Impassive.wav --tempo_sensitivity 0.5 --depth 0.8 --resolution 512 --output_file ./Impassive.mp4 --sort_classes_by_power 0 --num_classes 12 --classes 663 947 642782 624 909 541 815 978 789 508 429
 gan:
 	cd video-generation
 	python visualize.py --song ./Impassive.wav --tempo_sensitivity 0.5 --depth 0.8 --resolution 512 --output_file ../Impassive.mp4 --use_previous_classes 1 --use_previous_vectors 1
-	cd ..
+	cd -
 
-audio: copy
+audio: midi
 	# Combining vibe tracks and adding tremolo to vibraphone parts
-	make vibe
-	# Combining notvibe tracks
-	make notvibe
+	make vibes
+	# Combining glockxylo tracks
+	make glockzylo
+	# Combining marimba tracks
+	make marimba
 	# Adding reverb to tracks and combining them together
 	make reverb
 	@make clean
 
 amerge: audio merge
 
-copy:
-	make cleanall
-	cp ./wavs/*.wav .
-
-
-vibe:
-	echo "sin(3*x/4)/2" | python 8d.py -i $(TITLE)-Vibes.wav -o temp01.wav --depth 0.5 --period 200 --wavelength $(4PIdiv3)
-	ffmpeg $(FFMPEGFLAGS) -channel_layout stereo -i temp01.wav -filter:a "volume=0.9" temp02.wav
-	echo "-sin(3*x/4)" | python 8d.py -i $(TITLE)-8d-Vibes.wav -o temp01.wav --period 200 --normalize --wavelength $(4PIdiv3)
-	ffmpeg $(FFMPEGFLAGS) -channel_layout stereo -i temp01.wav -filter:a "volume=0.8" temp03.wav
-	ffmpeg $(FFMPEGFLAGS) -channel_layout stereo -i temp02.wav -channel_layout stereo -i temp03.wav -filter_complex amix=inputs=2:duration=longest temp01.wav
-	sox -r $(HERTZ) temp01.wav Vibes-Dry.wav tremolo 6 33
+vibes:
+	python 8d.py -i $(WAV)/$(TITLE)-Vibes.wav -o $(WAV)/temp01.wav -e vibes
+	ffmpeg $(FFMPEGFLAGS) \
+		-channel_layout stereo -i $(WAV)/temp01.wav \
+		-filter:a "volume=0.9" $(WAV)/temp02.wav
+	python 8d.py -i $(WAV)/$(TITLE)-8d-Vibes.wav -o $(WAV)/temp01.wav -e vibes
+	ffmpeg $(FFMPEGFLAGS) \
+		-channel_layout stereo -i $(WAV)/temp01.wav \
+		-filter:a "volume=0.8" $(WAV)/temp03.wav
+	ffmpeg $(FFMPEGFLAGS) \
+		-channel_layout stereo -i $(WAV)/temp02.wav \
+		-channel_layout stereo -i $(WAV)/temp03.wav \
+		-filter_complex amix=inputs=2:duration=longest $(WAV)/temp01.wav
+	sox -r $(HERTZ) temp01.wav $(WAV)/Vibes-Dry.wav tremolo 6 33
 	@make clean
 
-notvibe:
-	echo "-sin(3*x/4)/2" | python 8d.py -i $(TITLE)-NotVibes.wav -o temp01.wav --period 200 --wavelength $(4PIdiv3)
-	ffmpeg $(FFMPEGFLAGS) -channel_layout stereo -i temp01.wav -filter:a "volume=1" temp02.wav
-	echo "sin(3*x/4)" | python 8d.py -i $(TITLE)-8d-NotVibes.wav -o temp01.wav --period 200 --normalize --wavelength $(4PIdiv3)
-	ffmpeg $(FFMPEGFLAGS) -channel_layout stereo -i temp01.wav -filter:a "volume=0.7" temp03.wav
-	ffmpeg $(FFMPEGFLAGS) -channel_layout stereo -i temp02.wav -channel_layout stereo -i temp03.wav -filter_complex amix=inputs=2:duration=longest NotVibes-Dry.wav
+glockxylo:
+	ffmpeg $(FFMPEGFLAGS) \
+		-channel_layout stereo -i $(WAV)/$(TITLE)-GlockXylo.wav \
+		-filter:a "volume=1" $(WAV)/temp02.wav
+	ffmpeg $(FFMPEGFLAGS) \
+		-channel_layout stereo -i $(WAV)/$(TITLE)-8d-GlockXylo.wav \
+		-filter:a "volume=0.6" $(WAV)/temp03.wav
+	ffmpeg $(FFMPEGFLAGS) \
+		-channel_layout stereo -i $(WAV)/temp02.wav \
+		-channel_layout stereo -i $(WAV)/temp03.wav \
+		-filter_complex amix=inputs=2:duration=longest $(WAV)/GlockXylo-Dry.wav
+	@make clean
+
+marimba:
+	python 8d.py -i $(WAV)/$(TITLE)-Marimba.wav -o $(WAV)/temp01.wav -e marimba
+	ffmpeg $(FFMPEGFLAGS) \
+		-channel_layout stereo -i $(WAV)/temp01.wav \
+		-filter:a "volume=1" $(WAV)/temp02.wav
+	python 8d.py -i $(WAV)/$(TITLE)-8d-Marimba.wav -o $(WAV)/temp01.wav -e marimba
+	ffmpeg $(FFMPEGFLAGS) \
+		-channel_layout stereo -i $(WAV)/temp01.wav \
+		-filter:a "volume=0.7" $(WAV)/temp03.wav
+	ffmpeg $(FFMPEGFLAGS) \
+		-channel_layout stereo -i $(WAV)/temp02.wav \
+		-channel_layout stereo -i $(WAV)/temp03.wav \
+		-filter_complex amix=inputs=2:duration=longest $(WAV)/Marimba-Dry.wav
 	@make clean
 
 reverb:
-	sox Vibes-Dry.wav Vibes-Wet.wav reverb $(SOXREVERB)
-	sox NotVibes-Dry.wav NotVibes-Wet.wav reverb $(SOXREVERB)
-	ffmpeg $(FFMPEGFLAGS) -channel_layout stereo -i Vibes-Dry.wav -channel_layout stereo -i NotVibes-Dry.wav -filter_complex amix=inputs=2:duration=longest $(TITLE)-Dry.wav
-	sox $(TITLE)-Dry.wav $(TITLE)-Wet.wav reverb $(SOXREVERB)
+	sox $(WAV)/Vibes-Dry.wav $(WAV)/Vibes-Wet.wav reverb $(SOXREVERB)
+	sox $(WAV)/GlockXylo-Dry.wav $(WAV)/GlockXylo-Wet.wav reverb $(SOXREVERB)
+	sox $(WAV)/Marimba-Dry.wav $(WAV)/Marimba-Wet.wav reverb $(SOXREVERB)
+	ffmpeg $(FFMPEGFLAGS) \
+		-channel_layout stereo -i $(WAV)/Vibes-Dry.wav \
+		-channel_layout stereo -i $(WAV)/GlockXylo-Dry.wav \
+		-channel_layout stereo -i $(WAV)/Marimba-Dry.wav \
+		-filter_complex amix=inputs=3:duration=longest $(WAV)/$(TITLE)-Dry.wav
+	sox $(WAV)/$(TITLE)-Dry.wav $(WAV)/$(TITLE)-Wet.wav reverb $(SOXREVERB)
+	cp $(WAV)/$(TITLE)-Wet.wav .
 	@make clean
 
 mirror:
@@ -128,11 +159,11 @@ upscale:
 
 merge:
 	# Adding formatted audio tracks to video
-	ffmpeg $(FFMPEGFLAGS) -i $(TITLE).mkv -channel_layout stereo -i $(TITLE)-Wet.wav -c:v copy -map 0:v:0 -map 1:a:0 -shortest $(TITLE)-Merged.mkv
-	mv $(TITLE)-Merged.mkv $(TITLE).mkv
+	ffmpeg $(FFMPEGFLAGS) -i $(TITLE).mkv -channel_layout stereo -i $(WAV)/$(TITLE)-Wet.wav -c:v copy -map 0:v:0 -map 1:a:0 -shortest $(MKV)/$(TITLE)-Merged.mkv
+	mv $(MKV)/$(TITLE)-Merged.mkv $(TITLE).mkv
 
 clean:
-	rm -f temp01.wav temp02.wav temp03.wav
+	rm -f $(WAV)/temp01.wav $(WAV)/temp02.wav $(WAV)/temp03.wav
 	rm -f $(TITLE)-Right.mkv $(TITLE)-Left.mkv $(TITLE)-Top.mkv $(TITLE)-Bottom.mkv
 
 cleanall:

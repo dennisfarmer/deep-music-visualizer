@@ -62,13 +62,13 @@ class NumpyTemplate(Template):
 
 class Function:
     def __init__(self, function_name: str, np_string: str=None, np_template: NumpyTemplate=None, **kwargs):
-        self.default = {"p": "2*pi", "a": "1"}
-        self.sawtooth = NumpyTemplate("sawtooth", "-(2*$a)/pi*arctan(cot((pi*t)/$p))", self.default)
-        self.sine = NumpyTemplate("sine", "$a*np.sin((2*np.pi)/np.abs($p)*t)", self.default)
-        self.cosine = NumpyTemplate("cosine", "$a*np.cos((2*np.pi)/np.abs($p)*t)", self.default)
+        self.periodic_default = {"p": "2*pi", "a": "1"}
+        self.polynomial_default = {"a": "1", "b": "1", "o": "0"}
+        self.sawtooth = NumpyTemplate("sawtooth", "$o-(2*$a)/pi*arctan(cot((pi*t)/$p))", self.periodic_default)
+        self.sine = NumpyTemplate("sine", "$o+$a*np.sin((2*np.pi)/np.abs($p)*t)", self.periodic_default)
+        self.cosine = NumpyTemplate("cosine", "$o+$a*np.cos((2*np.pi)/np.abs($p)*t)", self.periodic_default)
+        self.linear = NumpyTemplate("linear", "$a + $b*(x-$o)", 
 
-        self.sine1 = self.sine.copy(default={"p": "pi/6", "a": "0.5"))
-        self.sine1.rename("sine1")
 
         if np_template:
             if isinstance(np_template, NumpyTemplate):

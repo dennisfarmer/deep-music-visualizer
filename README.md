@@ -34,6 +34,7 @@ git clone https://github.com/msieg/deep-music-visualizer.git
 cd deep-music-visualizer
 pip install conda
 conda env create -f environment.yml
+conda activate ganmusicvis
 ```
 
 If you are on Linux, you may also need to run:

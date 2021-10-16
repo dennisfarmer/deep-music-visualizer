@@ -3,7 +3,7 @@
 # Midi Parser that retrieves timemarks for each measure of music within a midi file
 
 from mido import MidiFile, tempo2bpm
-from numpy import linspace, floor, ceil, ndarray
+from numpy import linspace, floor, ceil, repeat, ndarray
 from function import Function
 from typing import Union
 
@@ -58,7 +58,7 @@ class Measure:
         self.tsig = tsig
         self.t_0 = t_0
         self.t_f = t_f
-        self.beats = linspace(self.t_0, self.t_f, (self.tsig.upper*(self.tsig.lower/4) + 1 ))[:-1]
+        self.beats = linspace(self.t_0, self.t_f, self.tsig.upper + 1 )[:-1]
 
     def time_per_beat(self):
         t = 1/(self.bpm.bpm/60)
@@ -67,12 +67,14 @@ class Measure:
         return t
 
     def beat(self, num):
-        if num > self.tsig.upper*(self.tsig.lower/4) + 1 or num < 0:
-            raise ValueError("beat number cannot be larger than number of beats, or less than zero")
+        if num > self.tsig.upper + 1:
+            raise ValueError(f"{str(self)}\nbeat({num=}): beat number cannot be larger than number of beats ({str(self.tsig)})")
+        elif num < 0:
+            raise ValueError(f"{str(self)}\nbeat({num=}): beat number cannot be less than zero")
         elif num == self.tsig.upper + 1:
             return self.t_f
         else:
-            return self.beats[num-1] + (self.time_per_beat() * (num - np.floor(num)))
+            return self.beats[int(floor(num))-1] + (self.time_per_beat() * (num - floor(num)))
 
     def __str__(self):
         return f"{self.mm}: {self.tsig} @{self.bpm} t_0={self.t_0:.2f} -> t_f={self.t_f:.2f}"
@@ -91,7 +93,7 @@ class MeasureArray:
         if m > len(self.arr):
             raise ValueError(f"next_beat({m=}, {b=}): requested index out of bounds")
         curr_measure = self.arr[m-1]
-        if (b // len(curr_measure)) > 0):
+        if (b // len(curr_measure)) > 0:
             return (m+1, 1)
         return (m, b+1)
 
@@ -203,19 +205,19 @@ class MeasureArray:
         return func.f(linspace(0,1,time_ms))
 
     def whole_cosine_line(self, ear_i, ear_mid, time_ms):
-        amplitude = (ear_mid-ear_i)/2
-        offset = ear_mid-amplitude
+        amplitude = (ear_i-ear_mid)/2
+        offset = ear_i-amplitude
         func = Function("cosine", o=offset, a=amplitude, p=1)
         return func.f(linspace(0,1,time_ms))
 
     # similar to whole_cosine, starts and ends steeper
     def half_sine_line(self, ear_i, ear_mid, time_ms):
-        func = Function("sine", o=ear_i, a=ear_mid-ear_i p=2)
+        func = Function("sine", o=ear_i, a=ear_mid-ear_i, p=2)
         return func.f(linspace(0,1,time_ms))
 
     def half_cosine_line(self, ear_i, ear_f, time_ms):
-        amplitude = (ear_f-ear_i)/2
-        offset = ear_f-amplitude
+        amplitude = (ear_i-ear_f)/2
+        offset = ear_i-amplitude
         func = Function("cosine", o=offset, a=amplitude, p=2)
         return func.f(linspace(0,1,time_ms))
 
@@ -235,15 +237,18 @@ class MeasureArray:
         return func.f(linspace(0,1,time_ms))
 
     def get_time(self, m1: int, b1: Union[int, float], m2: int=None, b2: Union[int, float]=None, end: bool=False, delta: bool=True):
-        m -= 1
+        # add seconds to result when at the end of a piecs to account for reverb
+        reverb_time_addition_sec = 3
         t1 = self.arr[m1-1].beat(b1)
         t = 0,0
         # calculate time between m1,b1 and end of piece
         if end:
-            m2 = self.arr[-1].mm
-            b2 = self.arr[-1].beat(len(self.arr[-1]) + 1)
+            t2 = self.arr[-1].beat(len(self.arr[-1]) + 1) + reverb_time_addition_sec
+            t = t1, t2
+            if delta:
+                return abs(t[1] - t[0])
+            return t
         if m2 and b2:
-            m2 -= 1
             t2 = self.arr[m2-1].beat(b2)
             t = t1, t2
             if delta:
@@ -251,7 +256,7 @@ class MeasureArray:
             return t
         return t1
 
-    def apply_effect(self, effect: str=None, m1: int=None, b1: Union[int, float]=None, m2: int=None, b2: Union[int, float]=None, ear_i: float=None, ear_mid: float=None, ear_f: float=None, cycles: Union[int, str]=None, clip_effect: bool=True, _json: dict=None) -> np.ndarray:
+    def apply_effect(self, _json: dict=None, effect: str=None, m1: int=None, b1: Union[int, float]=None, m2: int=None, b2: Union[int, float]=None, ear_i: float=None, ear_mid: float=None, ear_f: float=None, cycles: Union[int, str]=None, clip_effect: bool=True) -> ndarray:
 
         if _json:
             try:
@@ -276,11 +281,11 @@ class MeasureArray:
                 cycles = _json["cycles"]
 
         if str(m2) == "end":
-            time_ms = np.floor(self.get_time(m1, b1, end=True, delta=True) * 100)
+            time_ms = int(floor(self.get_time(m1, b1, end=True, delta=True) * 1000))
         else:
             if b2 is None:
-                raise ValueError(f"apply_effect(): missing required \"b2\" argument"
-            time_ms = np.floor(self.get_time(m1, b1, m2, b2, delta=True) * 1000)
+                raise ValueError(f"apply_effect(): missing required \"b2\" argument")
+            time_ms = int(floor(self.get_time(m1, b1, m2, b2, delta=True) * 1000))
 
         # crop effect by one millisecond so that proceeding effect
         # is alligned correctly

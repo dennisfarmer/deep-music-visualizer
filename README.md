@@ -20,13 +20,7 @@ Install Musescore <a href="https://musescore.org/en/download">here</a>, and in y
 
 [](./media/musescore_preferences.png)
 
-To use the `mscore` command line utility, you may have to add Musescore to your `$PATH` via adding the following line to your .zshrc or equivalent:
-
-```zsh
-export PATH="/Applications/Musescore\ 3.app/Contents/MacOS/mscore:$PATH"
-```
-
-For Windows/Linux, just export each of the scores as `.wav` files manually.
+Update the Makefile's `MSCORE` variable to point towards your command line musescore executable. For Windows/Linux, just export each of the scores as `.wav` files manually.
 
 With conda installed, run the following (pytorch gives issues when installed with pip for some reason)
 ```zsh
@@ -63,7 +57,7 @@ bash www.apple.com/purchase.sh --macbook_pro_13
 
 See original repository for details on `visualize.py` parameters.
 
-Using Musescore, export the score parts (Vibe, Bells, and Marimba) from the two .mscz files to the `./media` directory of the repository using `make mscore` or manually, then run either `make gan build` or one of the following to compile the music and audio into a music video.
+Using Musescore, export the score parts (Vibe, Bells, and Marimba) from the three .mscz files to the `./media` directory of the repository using `make mscore` or manually, then run either `make gan build` or one of the following to compile the music and audio into a music video.
 
 ```zsh
 # construct a 512x512 neural network audio visualization of the unaltered audio (Impassive.wav)
@@ -87,5 +81,5 @@ make video
 # (equivalent to 'make audio merge')
 make amerge
 
-# see ./Makefile for additional details
+# see ./Makefile for additional rules
 ```

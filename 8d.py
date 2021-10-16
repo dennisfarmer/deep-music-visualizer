@@ -39,11 +39,12 @@ def to_8d(infile: str, outfile: str, effect_set: str, normalize: bool):
         pan_amounts = minmax_norm(pan_amounts, 1.0)
 
 
+    # safeguard for if pan_amounts array is shorter than audio length
     pan_limit = len(pan_amounts) - 1
 
     # integrate pan into audio
     chunks = list(enumerate(audio[::1]))
-    for i, chunk in tqdm(chunks, ascii="->=", desc="Processing 8d Chunks", unit="chunks", total=len(chunks)):
+    for i, chunk in tqdm(chunks, ascii="->=", desc=f"Processing 8d Chunks ({effect_set})", unit="chunks", total=len(chunks)):
         if i > pan_limit:
             i = -1
         shrooms = shrooms + chunk.pan(pan_amounts[i])
@@ -55,6 +56,8 @@ if __name__ == "__main__":
     parser.add_argument("-i", "--input", required=True, type=str, help="input file")
     parser.add_argument("-o", "--output", required=True, type=str, help="output file")
     parser.add_argument("-e", "--effect", required=True, type=str, help="set of pan effects to use from effects.json")
+    parser.add_argument("-j", "--json", default="effects.json", help="location of the effects.json file, used for generating panning effects")
+    parser.add_argument("-m", "--midi", default="media/measures.midi", help="location of the measures.midi file, used for calculating effect timings")
     parser.add_argument("-n", "--normalize", action="store_true", help="normalize pan matrix to extend to -1 and 1 as bounds. Performed automatically for matrices that exceed (-1,1)")
     args = parser.parse_args()
     to_8d(args.input, args.output, args.effect, args.normalize)

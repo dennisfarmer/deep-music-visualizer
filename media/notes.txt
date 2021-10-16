@@ -97,3 +97,88 @@ interesting indices:
 p 378: 'capuchin, ringtail, Cebus capucinus',
 
 445: 'bikini, two-piece',
+
+um: upper middle (+- 0.25)
+m: middle (+- 0.50)
+0.8: pretty good cutoff to avoid opposite ear from cutting out
+
+figure out how to prevent volume increase for specific cases (mainly the jump on sawtooth_
+
+for 2nd part, increase vibe volume (or lessen vibe vol at beginning and increase all of vibe in the mix
+
+
+1: gap 1/4 bar, don't do anything for first .6 sec
+2: start vibe in m left, b3 be at +0.25, cos wave from .25 to -0.1 back to .25 in two beats (period=2*the amount of time in two beats)
+3: drop vibe to -.8, climb to +.4 by b3 and stay
+4: b3 dive vibe 16th part from +.4 to -.25 in two beats and stay there for a while
+
+
+
+
+
+
+
+1: 1/4 @♩=100 t_0=0.00 -> t_f=0.60
+2: 4/4 @♩=100 t_0=0.60 -> t_f=3.00
+3: 4/4 @♩=95 t_0=3.00 -> t_f=5.53
+4: 4/4 @♩=90 t_0=5.53 -> t_f=8.19
+5: 6/4 @♩=95 t_0=8.19 -> t_f=11.98
+6: 6/4 @♩=95 t_0=11.98 -> t_f=15.77
+7: 5/4 @♩=95 t_0=15.77 -> t_f=18.93
+8: 3/4 @♩=95 t_0=18.93 -> t_f=20.82
+9: 3/4 @♩=95 t_0=20.82 -> t_f=22.72
+10: 3/4 @♩=95 t_0=22.72 -> t_f=24.61
+11: 3/4 @♩=95 t_0=24.61 -> t_f=26.51
+12: 4/4 @♩=95 t_0=26.51 -> t_f=29.04
+13: 3/4 @♩=95 t_0=29.04 -> t_f=30.93
+14: 3/4 @♩=95 t_0=30.93 -> t_f=32.82
+15: 3/4 @♩=95 t_0=32.82 -> t_f=34.72
+16: 3/4 @♩=95 t_0=34.72 -> t_f=36.61
+17: 4/4 @♩=95 t_0=36.61 -> t_f=38.82
+18: 4/4 @♩=95 t_0=38.82 -> t_f=41.04
+
+#python visualize.py --song ./Impassive.wav --tempo_sensitivity 0.5 --depth 0.8 --resolution 512 --output_file ./Impassive.mp4 --sort_classes_by_power 0 --num_classes 12 --classes 663 947 642782 624 909 541 815 978 789 508 429
+# To add delay to reverb tracks:
+#sox -n -r 48000 -c 2 silence.wav trim 0 0.020
+#sox -r 48000 silence.wav temp01.wav temp02.wav
+
+# 8d tracks have 8d effect added with 8d.py
+# Vibraphone tracks have tremolo effect added with sox filter
+
+# 8D EFFECT OPTIONS:
+# 8d tracks: set period to 200ms since it lines up with mini-climax at mm. 7
+# normal: either 200ms or 300ms, both 8d/normal tracks seem to line up at measure 7 since 200+300 are multiples of each other
+# sine wave starts at center (x=0) and trails towards right ear first
+
+# Video Upscaling:
+# Bicubic Interpolation
+# 1080 / 1920 = 0.5625
+# (512 + 512) * 0.5625 = 576
+# 576 - 512 = 64
+# 64 / 2 = 32
+
+# bottom: 0,32, 1024x32
+# top: 0,512, 1024x32
+
+
+
+
+#-map 0:v:0 maps the first (index 0) video stream from the input to the first (index 0) video stream in the output.
+#-map 1:a:0 maps the second (index 1) audio stream from the input to the first (index 0) audio stream in the output.
+
+# swap channels on stereo audio file
+#ffmpeg -i INPUT -map_channel 0.0.1 -map_channel 0.0.0 OUTPUT
+
+#ffmpeg $(FFMPEGFLAGS) -i $(TITLE).mkv -vf scale=1920:1080:flags=lanczos $(TITLE)-Lanczos.mkv
+
+#compare:
+	#ffmpeg $(FFMPEGFLAGS) -i $(TITLE)-Bicubic.mkv -filter:v "crop=960:1080:0:0" -c:a copy $(TITLE)-BicubicLeft.mkv
+	#ffmpeg $(FFMPEGFLAGS) -i $(TITLE)-Lanczos.mkv -filter:v "crop=960:1080:960:0" -c:a copy $(TITLE)-LanczosRight.mkv
+	#ffmpeg $(FFMPEGFLAGS) -i $(TITLE)-BicubicLeft.mkv -i $(TITLE)-LanczosRight.mkv -filter_complex hstack=inputs=2 $(TITLE)-Compare.mkv
+	# Adding formatted audio tracks to video
+	#ffmpeg $(FFMPEGFLAGS) -i $(TITLE)-Compare.mkv -channel_layout stereo -i $(TITLE)-Wet.wav -c:v copy -map 0:v:0 -map 1:a:0 -shortest $(TITLE)-Merged.mkv
+
+#filter:
+	#ffmpeg $(FFMPEGFLAGS) -i $(TITLE)-Bicubic.mkv -vf curves=vintage $(TITLE)-BicubicFiltered.mkv
+	# Adding formatted audio tracks to video
+	#ffmpeg $(FFMPEGFLAGS) -i $(TITLE)-BicubicFiltered.mkv -channel_layout stereo -i $(TITLE)-Wet.wav -c:v copy -map 0:v:0 -map 1:a:0 -shortest $(TITLE)-Merged.mkv

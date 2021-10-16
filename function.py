@@ -63,11 +63,11 @@ class NumpyTemplate(Template):
 class Function:
     def __init__(self, function_name: str, np_string: str=None, np_template: NumpyTemplate=None, **kwargs):
         self.periodic_default = {"p": "2*pi", "a": "1"}
-        self.polynomial_default = {"a": "1", "b": "1", "o": "0"}
+        self.linear_default = {"a": "1", "b": "1", "o": "0"}
         self.sawtooth = NumpyTemplate("sawtooth", "$o-(2*$a)/pi*arctan(cot((pi*t)/$p))", self.periodic_default)
-        self.sine = NumpyTemplate("sine", "$o+$a*np.sin((2*np.pi)/np.abs($p)*t)", self.periodic_default)
-        self.cosine = NumpyTemplate("cosine", "$o+$a*np.cos((2*np.pi)/np.abs($p)*t)", self.periodic_default)
-        self.linear = NumpyTemplate("linear", "$a + $b*(x-$o)", 
+        self.sine = NumpyTemplate("sine", "$o+$a*sin((2*pi)/abs($p)*t)", self.periodic_default)
+        self.cosine = NumpyTemplate("cosine", "$o+$a*cos((2*pi)/abs($p)*t)", self.periodic_default)
+        self.linear = NumpyTemplate("linear", "$a+$b*(t-$o)", self.linear_default)
 
 
         if np_template:
@@ -87,20 +87,11 @@ class Function:
             raise ValueError("function name or Numpy Template not provided")
 
         self.name = self.np_template.name
-        self.np_template.update(kwargs)
+        #self.np_template.update(kwargs)
         self.update(kwargs)
 
-    def update(self, function_name: str=None, np_template: NumpyTemplate=None, **kwargs):
-        if function_name:
-            if function_name in self.__dict__:
-                if isinstance(self.__dict__[function_name], NumpyTemplate):
-                    self.np_template = self.__dict__[function_name]
-        elif np_template:
-            if isinstance(np_template, NumpyTemplate):
-                self.np_template = np_template
-            else:
-                raise ValueError("invalid Numpy Template, use NumpyTemplate object constructor")
-        self.np_template.update(kwargs)
+    def update(self, parameters: dict):
+        self.np_template.update(parameters)
         scope = {}
         import_np = f"from numpy import pi, cos, sin, tan, arccos, arcsin, arctan, e, exp, sqrt, abs\ndef csc(t): return 1/sin(t)\ndef sec(t): return 1/cos(t)\ndef cot(t): return 1/tan(t)"
         exec(f"{import_np}\n{self.np_template.lambda_str()}", scope)

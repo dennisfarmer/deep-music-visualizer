@@ -7,15 +7,21 @@ The vibraphone and marimba voices contrast as representing the optimistic and th
 
 [![Alt text](https://img.youtube.com/vi/-Y9Iod7U6B8/0.jpg)](https://www.youtube.com/watch?v=-Y9Iod7U6B8)
 
+Check out the video on Youtube:<br>
+<a href="https://youtu.be/-Y9Iod7U6B8">https://youtu.be/-Y9Iod7U6B8</a>
+
+Check out the sheet music here:<br>
+<a href="https://musescore.com/dennisfarmer/impassive">https://musescore.com/dennisfarmer/impassive</a>
+
 ---
 
 An 8D audio generator / midi parser has been written in Python to create an "audio moving from ear to ear" illusion that was inspired by the Pokemon Mystery Dungeon: Explorers of Sky soundtrack (it's very tasteful when used right). For the specific timings of the effects, see the `effects.json` file (negative `ear` values represent the sound being in the left ear, and positive ones represent the right ear). All of the scripts work together to apply the effects given in the json to the audio track using different types of functions (sine, sawtooth, linear, ...).
 
 The music is in the form of six related Musescore `.mscz` files, which contain parts within them that can be exported to wav and mixed with FFmpeg, SoX, and Python to compensate for Musescore audio output quality (I'm too poor to buy Sibelius).
 
-The BigGAN script generates a square video, which has been mirrored over multiple axies to create an even trippier visual effect. Image parameters (what images show up) were chosen from a list of <a href=""https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a>ImageNet class indices</a>, which are basically image categories that have been pretrained to allow for deep learning wooshy wooshy magic to occur (I don't know what I'm talking about... yet!):
+The BigGAN script generates a square video, which has been mirrored over multiple axies to create an even trippier visual effect. Image parameters (what images show up) were chosen from a list of <a href="https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a">ImageNet class indices</a>, which are basically image categories that have been pretrained to allow for deep learning wooshy wooshy magic to occur (I don't know what I'm talking about... yet!):
 
-663 monastery, 947 mushroom, 642 marimba/xylophone, 782 CRT screen, 624 library, 909 wok, 541 drum, 815 spider web, 978 seashore/coast, 789 shoji (japanese windows), 508 computer keyboard, 429 baseball
+> 663 monastery, 947 mushroom, 642 marimba/xylophone, 782 CRT screen, 624 library, 909 wok, 541 drum, 815 spider web, 978 seashore/coast, 789 shoji (japanese windows), 508 computer keyboard, 429 baseball
 
 For a surface-level explaination of the BigGAN magic used to generate the video, see the following medium.com article: 
 <a href="https://towardsdatascience.com/the-deep-music-visualizer-using-sound-to-explore-the-latent-space-of-biggan-198cd37dac9a">The Deep Music Visualizer: Using sound to explore the latent space of BigGAN</a>

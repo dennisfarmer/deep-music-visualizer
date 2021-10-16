@@ -26,6 +26,7 @@ midi:
 	# generating midi file for audio panning
 	@$(MSCORE) $(MSCZDIR)/$(TITLE).mscz -o $(MSCZDIR)/measures.midi
 
+#python visualize.py --song ./Impassive.wav --tempo_sensitivity 0.5 --depth 0.8 --resolution 512 --output_file ./Impassive.mp4 --sort_classes_by_power 0 --num_classes 12 --classes 663 947 642 782 624 909 541 815 978 789 508 429
 gan:
 	conda activate ganmusicvis
 	cd $(GANDIR)

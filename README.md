@@ -38,7 +38,7 @@ Update the Makefile's `MSCORE` variable to point towards your command line muses
 
 With conda installed, run the following (pytorch gives issues when installed with pip for some reason)
 ```zsh
-git clone https://github.com/msieg/deep-music-visualizer.git
+git clone https://github.com/dennisfarmer/deep-music-visualizer.git
 cd deep-music-visualizer
 pip install conda
 conda env create -f environment.yml

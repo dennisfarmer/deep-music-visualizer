@@ -15,7 +15,7 @@ An 8D audio generator / midi parser has been written in Python to create an "aud
 
 The music is in the form of six related Musescore `.mscz` files, which contain parts within them that can be exported to wav and mixed with FFmpeg, SoX, and Python to compensate for Musescore audio output quality (I'm too poor to buy Sibelius).
 
-The BigGAN script generates a square video, which has been mirrored over multiple axies to create an even trippier visual effect. Image parameters (what images show up) were chosen from a list of <a href="https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a">ImageNet class indices</a>, which are basically image categories that have been pretrained to allow for deep learning wooshy wooshy magic to occur (I don't know what I'm talking about... yet!):
+The BigGAN script generates a square video, which has been mirrored over multiple axies. Image parameters (what images show up) were chosen from a list of <a href="https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a">ImageNet class indices</a>.
 
 > 663 monastery, 947 mushroom, 642 marimba/xylophone, 782 CRT screen, 624 library, 909 wok, 541 drum, 815 spider web, 978 seashore/coast, 789 shoji (japanese windows), 508 computer keyboard, 429 baseball
 
@@ -32,7 +32,7 @@ Install Musescore <a href="https://musescore.org/en/download">here</a>, and in y
 
 Update the Makefile's `MSCORE` variable to point towards your command line musescore executable. For Windows/Linux, just export each of the scores as `.wav` files manually.
 
-With conda installed, run the following (pytorch gives issues when installed with pip for some reason)
+With conda installed, run the following
 ```zsh
 git clone https://github.com/dennisfarmer/deep-music-visualizer.git
 cd deep-music-visualizer

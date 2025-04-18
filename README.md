@@ -13,7 +13,7 @@ Check out the sheet music here:<br>
 
 An 8D audio generator / midi parser has been written in Python to create an "audio moving from ear to ear" illusion that was inspired by the Pokemon Mystery Dungeon: Explorers of Sky soundtrack (it's very tasteful when used right). For the specific timings of the effects, see the `effects.json` file (negative `ear` values represent the sound being in the left ear, and positive ones represent the right ear). All of the scripts work together to apply the effects given in the json to the audio track using different types of functions (sine, sawtooth, linear, ...).
 
-The music is in the form of six related Musescore `.mscz` files, which contain parts within them that can be exported to wav and mixed with FFmpeg, SoX, and Python to compensate for Musescore audio output quality (I'm too poor to buy Sibelius).
+The music is in the form of six related Musescore `.mscz` files, which contain parts within them that can be exported to wav and mixed with FFmpeg, SoX, and Python to compensate for Musescore audio output quality.
 
 The BigGAN script generates a square video, which has been mirrored over multiple axies. Image parameters (what images show up) were chosen from a list of <a href="https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a">ImageNet class indices</a>.
 
